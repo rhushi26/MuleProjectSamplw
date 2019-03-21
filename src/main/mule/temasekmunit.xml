@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<http:listener-config name="HTTP_Listener_config"
+
+		doc:name="HTTP Listener config">
+
+		<http:listener-connection host="0.0.0.0"
+
+			port="8085" />
+
+	</http:listener-config>
+
+	<!-- <configuration-properties file="mule-artifact.properties"
+
+		doc:name="Configuration properties" /> -->
+
+	<flow name="mainFlow">
+
+		<http:listener config-ref="HTTP_Listener_config" path="/"
+
+			doc:name="HTTP Listener" allowedMethods="GET" />
+
+		<set-payload value="#[attributes.queryParams.url_key]"
+
+			doc:name="Set query param 'url_key' to payload" />
+
+		<flow-ref name="secondaryFlow" doc:name="secondaryFlow" />
+
+		<choice doc:name="Choice">
+
+			<when expression="#[vars.flowValue == 'flowValue_1']">
+
+				<set-payload value="#['responsePayload_1']" doc:name="Set Response Payload" />
+
+			</when>
+
+			<when expression="#[vars.flowValue == 'flowValue_2']">
+				<set-payload value="#['responsePayload_2']" doc:name="Set Payload" doc:id="1159d22a-c095-42bc-8615-2451a0a3921b" />
+			</when>
+			<otherwise>
+
+				<set-payload value="#[payload]" doc:name="Set Response Payload" />
+
+			</otherwise>
+
+		</choice>
+
+	</flow>
+	<flow name="secondaryFlow">
+		<choice doc:name="Choice">
+
+			<when expression="payload == 'payload_1'">
+
+				<flow-ref name="firstSubFlow" doc:name="firstSubFlow" />
+
+			
+</when>
+
+			<when expression="payload == 'payload_3'">
+				<flow-ref doc:name="Flow Reference" doc:id="b7bb9ca5-a4a5-41bc-b887-ccb938ac6b7b" name="thirdSubFlow"/>
+			</when>
+			<otherwise>
+
+				<flow-ref name="secondSubFlow" doc:name="secondSubFlow" />
+
+			</otherwise>
+
+		</choice>
+
+	</flow>
+
+	<sub-flow name="firstSubFlow">
+
+		<set-variable variableName="flowValue" value="flowValue_1"
+
+			doc:name="Set Variable" />
+
+	</sub-flow>
+
+	<sub-flow name="secondSubFlow" doc:id="682a7b91-d6c9-4026-b04c-30344157141a">
+
+		<set-variable variableName="flowValue" value="flowValue_2"
+
+			doc:name="Set Variable" />
+
+	</sub-flow>
+	
+	<sub-flow name="thirdSubFlow" doc:id="f676ac15-1092-41dd-b79c-e81bff6c97da">
+
+		<set-variable variableName="flowValue" value="flowValue_3"
+
+			doc:name="Set Variable" />
+
+	</sub-flow>
+	<sub-flow name="fourthSubFlow" doc:id="5e1d6a1c-51a2-4012-ad94-3158bbd5e640">
+
+		<set-variable variableName="flowValue" value="flowValue_4"
+
+			doc:name="Set Variable" />
+
+	</sub-flow>
+</mule>
