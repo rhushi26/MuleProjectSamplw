@@ -44,7 +44,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			</when>
 			<otherwise>
 
-				<set-payload value="#[payload]" doc:name="Set Response Payload" />
+				<set-payload value="#[payload] " doc:name="Set Response Payload" />
 
 			</otherwise>
 
